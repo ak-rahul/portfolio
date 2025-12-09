@@ -4,23 +4,19 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Github, ExternalLink, Package } from "lucide-react";
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../components/ui/dialog";
-import { projects } from "../data/projects";
-import type { Project } from "../types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { projects } from "@/data/projects";
 
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [showAll, setShowAll] = useState(false);
-
-  const displayedProjects = showAll ? projects : projects.filter(p => p.featured);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
 
   return (
-    <section id="projects" className="py-20 px-4" ref={ref}>
+    <section id="projects" className="py-20 px-4 bg-transparent" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -35,14 +31,14 @@ export default function Projects() {
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {displayedProjects.map((project, idx) => (
+            {projects.map((project, idx) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                <Card className="h-full flex flex-col hover:shadow-xl transition-shadow cursor-pointer group">
+                <Card className="h-full flex flex-col hover:shadow-xl transition-shadow cursor-pointer group backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">
                       {project.title}
@@ -51,17 +47,17 @@ export default function Projects() {
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="flex flex-wrap gap-2">
-                      {project.tech.slice(0, 5).map((tech) => (
+                      {project.tech.slice(0, 4).map((tech) => (
                         <Badge key={tech} variant="outline">
                           {tech}
                         </Badge>
                       ))}
-                      {project.tech.length > 5 && (
-                        <Badge variant="outline">+{project.tech.length - 5}</Badge>
+                      {project.tech.length > 4 && (
+                        <Badge variant="outline">+{project.tech.length - 4}</Badge>
                       )}
                     </div>
                   </CardContent>
-                  <CardFooter className="gap-2">
+                  <CardFooter className="gap-2 flex-wrap">
                     <Button variant="outline" size="sm" asChild>
                       <a
                         href={project.github}
@@ -72,18 +68,6 @@ export default function Projects() {
                         Code
                       </a>
                     </Button>
-                    {project.demo && (
-                      <Button variant="outline" size="sm" asChild>
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          Demo
-                        </a>
-                      </Button>
-                    )}
                     {project.pypi && (
                       <Button variant="outline" size="sm" asChild>
                         <a
@@ -108,24 +92,9 @@ export default function Projects() {
               </motion.div>
             ))}
           </div>
-
-          {/* Show More Button */}
-          {!showAll && projects.length > projects.filter(p => p.featured).length && (
-            <motion.div
-              className="text-center mt-8"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <Button onClick={() => setShowAll(true)} variant="outline" size="lg">
-                Show All Projects ({projects.length - projects.filter(p => p.featured).length} more)
-              </Button>
-            </motion.div>
-          )}
         </motion.div>
       </div>
 
-      {/* Project Detail Modal */}
       <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           {selectedProject && (
@@ -141,7 +110,7 @@ export default function Projects() {
                 <div>
                   <h4 className="font-semibold mb-2">Technologies Used:</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedProject.tech.map((tech) => (
+                    {selectedProject.tech.map((tech: string) => (
                       <Badge key={tech}>{tech}</Badge>
                     ))}
                   </div>
@@ -157,18 +126,6 @@ export default function Projects() {
                       View on GitHub
                     </a>
                   </Button>
-                  {selectedProject.demo && (
-                    <Button variant="outline" asChild>
-                      <a
-                        href={selectedProject.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Live Demo
-                      </a>
-                    </Button>
-                  )}
                   {selectedProject.pypi && (
                     <Button variant="outline" asChild>
                       <a

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, FileText, ExternalLink } from "lucide-react";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   return (
@@ -16,7 +16,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             Rahul AK
           </h1>
           <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-foreground">
@@ -27,28 +27,26 @@ export default function Hero() {
             Specialized in agentic AI applications, repository analysis tools, and optimization algorithms.
           </p>
 
-          {/* CTA Buttons */}
           <motion.div
             className="flex flex-wrap gap-4 justify-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <Button size="lg" asChild>
+            <Button size="lg" asChild className="text-lg px-8 py-6">
               <a href="#projects">
                 View Projects
-                <ExternalLink className="ml-2 h-4 w-4" />
+                <ExternalLink className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" asChild className="text-lg px-8 py-6">
               <a href="#contact">
                 Get in Touch
-                <Mail className="ml-2 h-4 w-4" />
+                <Mail className="ml-2 h-5 w-5" />
               </a>
             </Button>
           </motion.div>
 
-          {/* Social Links */}
           <motion.div
             className="flex gap-4 justify-center"
             initial={{ opacity: 0 }}
@@ -62,40 +60,29 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 aria-label="GitHub"
               >
-                <Github className="h-5 w-5" />
+                <Github className="h-6 w-6" />
               </a>
             </Button>
             <Button variant="ghost" size="icon" asChild>
               <a
-                href="https://linkedin.com/in/ak-rahul"
+                href="https://www.linkedin.com/in/ak-rahul"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="h-5 w-5" />
+                <Linkedin className="h-6 w-6" />
               </a>
             </Button>
             <Button variant="ghost" size="icon" asChild>
               <a
-                href="mailto:your.email..example.com"
+                href="mailto:your.email@example.com"
                 aria-label="Email"
               >
-                <Mail className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Resume"
-              >
-                <FileText className="h-5 w-5" />
+                <Mail className="h-6 w-6" />
               </a>
             </Button>
           </motion.div>
 
-          {/* Scroll Indicator */}
           <motion.div
             className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
             animate={{ y: [0, 10, 0] }}

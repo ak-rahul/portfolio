@@ -28,7 +28,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="py-20 px-4" ref={ref}>
+    <section id="about" className="py-20 px-4 bg-transparent" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,7 +40,6 @@ export default function About() {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Text Content */}
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground leading-relaxed">
                 I'm a <span className="text-primary font-semibold">Full-Stack AI Developer</span> specializing 
@@ -60,7 +59,7 @@ export default function About() {
                 multi-agent study assistants.
               </p>
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-8 pt-4">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary">6+</div>
                   <div className="text-sm text-muted-foreground">Projects</div>
@@ -76,7 +75,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* Highlights Cards */}
             <div className="space-y-4">
               {highlights.map((item, index) => (
                 <motion.div
@@ -84,7 +82,7 @@ export default function About() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="p-6 rounded-lg border border-border bg-card hover:bg-accent transition-colors"
+                  className="p-6 rounded-lg border bg-card hover:bg-accent transition-colors backdrop-blur-sm"
                 >
                   <div className="flex items-start gap-4">
                     <div className="p-2 rounded-lg bg-primary/10 text-primary">
