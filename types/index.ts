@@ -22,3 +22,26 @@ export interface SkillCategory {
   name: string;
   skills: Skill[];
 }
+
+export interface Star {
+  x: number;
+  y: number;
+  radius: number;
+  opacity: number;
+  twinkleSpeed: number;
+  increasing: boolean;
+  draw: () => void;
+  update: () => void;
+}
+
+export interface ShootingStar {
+  x: number;
+  y: number;
+  length: number;
+  speed: number;
+  opacity: number;
+  angle: number;
+  reset: () => void;
+  draw: () => void;
+  update: () => void;
+}
