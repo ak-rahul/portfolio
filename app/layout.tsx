@@ -11,6 +11,12 @@ export const metadata: Metadata = {
   keywords: ["AI Developer", "LangChain", "Multi-Agent Systems", "Python", "Next.js"],
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: {

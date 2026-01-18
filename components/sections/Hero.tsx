@@ -24,7 +24,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center px-4 pt-16 relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center px-4 pt-20 md:pt-16 relative overflow-hidden"
     >
       {/* Abstract background elements could function here if needed, but we rely on StarryBackground */}
 
@@ -43,21 +43,21 @@ export default function Hero() {
 
           <motion.h1
             variants={item}
-            className="text-6xl md:text-8xl font-black tracking-tight mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient"
+            className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tight mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient"
           >
             AK Rahul
           </motion.h1>
 
           <motion.h2
             variants={item}
-            className="text-2xl md:text-4xl font-light mb-8 text-muted-foreground"
+            className="text-2xl sm:text-3xl md:text-4xl font-light mb-8 text-muted-foreground leading-tight"
           >
             AI Developer & <span className="text-foreground font-semibold">Agentic Systems</span> Engineer
           </motion.h2>
 
           <motion.p
             variants={item}
-            className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed px-2"
           >
             I build intelligent multi-agent systems that solve complex problems.
             Specializing in <span className="text-primary">LangChain</span>, <span className="text-primary">RAG</span>, and scalable architecture.
@@ -65,15 +65,15 @@ export default function Hero() {
 
           <motion.div
             variants={item}
-            className="flex flex-wrap gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-lg hover:shadow-primary/25 transition-all" asChild>
+            <Button size="lg" className="h-12 sm:h-14 px-8 text-lg rounded-full shadow-lg hover:shadow-primary/25 transition-all w-full sm:w-auto" asChild>
               <a href="#projects">
                 View Work
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-primary/20 hover:bg-primary/5" asChild>
+            <Button size="lg" variant="outline" className="h-12 sm:h-14 px-8 text-lg rounded-full border-primary/20 hover:bg-primary/5 w-full sm:w-auto" asChild>
               <a href="#contact">
                 Contact Me
               </a>

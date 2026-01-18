@@ -24,7 +24,7 @@ export default function Projects() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-center">
             Featured Projects
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
@@ -39,7 +39,7 @@ export default function Projects() {
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                <Card className="h-full flex flex-col hover:shadow-xl transition-shadow cursor-pointer group backdrop-blur-sm">
+                <Card className="h-full flex flex-col hover:shadow-xl transition-shadow cursor-pointer group">
                   <CardHeader>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">
                       {project.title}
@@ -97,7 +97,7 @@ export default function Projects() {
       </div>
 
       <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[85vh] w-[90vw] overflow-y-auto rounded-lg">
           {selectedProject && (
             <>
               <DialogHeader>

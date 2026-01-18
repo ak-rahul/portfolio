@@ -12,14 +12,14 @@ export default function Skills() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" className="py-20 px-4 bg-black/10 backdrop-blur-sm" ref={ref}>
+    <section id="skills" className="py-20 px-4" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-center">
             Technical Skills
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
@@ -34,7 +34,7 @@ export default function Skills() {
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                <Card className="h-full hover:shadow-lg transition-shadow backdrop-blur-sm">
+                <Card className="h-full hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-xl">{category.name}</CardTitle>
                   </CardHeader>
@@ -63,7 +63,7 @@ export default function Skills() {
             transition={{ duration: 0.5, delay: 0.6 }}
           >
             <p className="text-muted-foreground">
-              <span className="text-primary font-semibold">Also proficient in:</span> Jupyter Notebooks, 
+              <span className="text-primary font-semibold">Also proficient in:</span> Jupyter Notebooks,
               Kaggle, Google Colab, PowerShell, Bash, YAML, Markdown, pytest, and more.
             </p>
           </motion.div>

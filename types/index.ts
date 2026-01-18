@@ -26,6 +26,8 @@ export interface SkillCategory {
 export interface Star {
   x: number;
   y: number;
+  vx: number;
+  vy: number;
   radius: number;
   opacity: number;
   twinkleSpeed: number;

@@ -177,3 +177,19 @@ section {
   position: relative;
   z-index: 10;
 }
+
+/* Better touch targets for mobile */
+@media (max-width: 640px) {
+  button, 
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Reset min-size for inline links/icons that shouldn't be huge */
+  p a, 
+  .social-link {
+    min-height: auto;
+    min-width: auto;
+  }
+}

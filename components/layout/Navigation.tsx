@@ -23,6 +23,11 @@ export default function Navigation() {
   useEffect(() => {
     setMounted(true);
 
+    // Clear hash on mount if present
+    if (window.location.hash) {
+      window.history.replaceState(null, "", " ");
+    }
+
     const handleScroll = () => {
       const sections = navItems.map((item) => item.href.slice(1));
       const scrollPosition = window.scrollY + 100;
@@ -56,8 +61,6 @@ export default function Navigation() {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-      // Update URL hash without scroll
-      history.pushState(null, "", href);
     }
   };
 
@@ -138,7 +141,7 @@ export default function Navigation() {
                 key={item.name}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${activeSection === item.href.slice(1)
+                className={`block px-3 py-3 rounded-md text-base font-medium transition-colors ${activeSection === item.href.slice(1)
                   ? "text-primary bg-primary/10"
                   : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                   }`}

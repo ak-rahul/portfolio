@@ -35,31 +35,31 @@ export default function About() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-12 text-center">
             About Me
           </h2>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground leading-relaxed">
-                I'm a <span className="text-primary font-semibold">Full-Stack AI Developer</span> specializing 
-                in building intelligent agentic systems. My expertise lies in creating multi-agent architectures 
+                I'm a <span className="text-primary font-semibold">Full-Stack AI Developer</span> specializing
+                in building intelligent agentic systems. My expertise lies in creating multi-agent architectures
                 that solve complex problems through collaborative AI.
               </p>
 
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Currently focused on <span className="text-primary font-semibold">LangChain, LangGraph</span>, 
-                and <span className="text-primary font-semibold">RAG systems</span>. I build production-ready 
+                Currently focused on <span className="text-primary font-semibold">LangChain, LangGraph</span>,
+                and <span className="text-primary font-semibold">RAG systems</span>. I build production-ready
                 applications with Docker, CI/CD pipelines, and modern DevOps practices.
               </p>
 
               <p className="text-lg text-muted-foreground leading-relaxed">
-                My projects have reached <span className="text-primary font-semibold">thousands of developers</span> worldwide, 
-                including DrRepo (repository analysis), optimization-benchmarks (PyPI package), and various 
+                My projects have reached <span className="text-primary font-semibold">thousands of developers</span> worldwide,
+                including DrRepo (repository analysis), optimization-benchmarks (PyPI package), and various
                 multi-agent study assistants.
               </p>
 
-              <div className="flex gap-8 pt-4">
+              <div className="flex flex-wrap gap-8 pt-4 justify-center md:justify-start">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary">6+</div>
                   <div className="text-sm text-muted-foreground">Projects</div>
@@ -82,7 +82,7 @@ export default function About() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="p-6 rounded-lg border bg-card hover:bg-accent transition-colors backdrop-blur-sm"
+                  className="p-6 rounded-lg border bg-card hover:bg-accent transition-colors"
                 >
                   <div className="flex items-start gap-4">
                     <div className="p-2 rounded-lg bg-primary/10 text-primary">

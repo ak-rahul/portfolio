@@ -59,6 +59,16 @@ export default function StarryBackground() {
         if (star.opacity <= 0.2) star.increasing = true;
       }
 
+      // Add motion
+      star.x += star.vx;
+      star.y += star.vy;
+
+      // Screen wrapping
+      if (star.x < 0) star.x = canvas.width;
+      if (star.x > canvas.width) star.x = 0;
+      if (star.y < 0) star.y = canvas.height;
+      if (star.y > canvas.height) star.y = 0;
+
       // Mouse interaction: subtle parallax/movement away from mouse
       const dx = mouseRef.current.x - star.x;
       const dy = mouseRef.current.y - star.y;
@@ -116,7 +126,9 @@ export default function StarryBackground() {
 
           if (distance < 100) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(${lineRgb}, ${0.1 * (1 - distance / 100)})`;
+            // Reduced visibility for subtler connections
+            const visibilityFactor = isDark ? 0.05 : 0.2;
+            ctx.strokeStyle = `rgba(${lineRgb}, ${visibilityFactor * (1 - distance / 100)})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(stars[i].x, stars[i].y);
             ctx.lineTo(stars[j].x, stars[j].y);
@@ -130,6 +142,8 @@ export default function StarryBackground() {
       return {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.2, // Random slow velocity x
+        vy: (Math.random() - 0.5) * 0.2, // Random slow velocity y
         radius: Math.random() * 1.5 + 0.5,
         opacity: Math.random(),
         twinkleSpeed: Math.random() * 0.02 + 0.005,
@@ -165,7 +179,7 @@ export default function StarryBackground() {
     // Initialize stars
     // Increased count slightly for better constellations
     const stars: Star[] = [];
-    for (let i = 0; i < 220; i++) {
+    for (let i = 0; i < 350; i++) {
       stars.push(createStar());
     }
 

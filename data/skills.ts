@@ -1,22 +1,22 @@
 export const skillCategories = [
   {
     name: "Languages",
-    skills: ["Python", "TypeScript", "JavaScript", "SQL"],
+    skills: ["Python", "Java", "C", "C++", "TypeScript", "JavaScript", "SQL"],
   },
   {
-    name: "AI/ML Frameworks",
-    skills: ["LangChain", "LangGraph", "OpenAI API", "Google Gemini", "Groq API", "RAG Systems"],
+    name: "AI & LLMs",
+    skills: ["LangChain", "LangGraph", "OpenAI API", "Google Gemini", "Groq API"],
   },
   {
-    name: "Web & Backend",
+    name: "Web Technologies",
     skills: ["Next.js", "React", "Streamlit", "FastAPI"],
   },
   {
-    name: "DevOps & Tools",
+    name: "DevOps & Cloud",
     skills: ["Docker", "GitHub Actions", "Git", "CI/CD"],
   },
   {
-    name: "Data & Databases",
-    skills: ["FAISS", "NumPy", "Pandas", "Matplotlib", "Vector DBs"],
+    name: "Databases",
+    skills: ["MongoDB", "Supabase", "Firebase", "Vector DBs"],
   },
 ];

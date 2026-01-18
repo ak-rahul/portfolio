@@ -15,7 +15,7 @@ export default function Contact() {
     {
       icon: <Mail className="h-6 w-6" />,
       title: "Email",
-      description: "your.email@example.com",
+      description: "Click to send me a message",
       href: "mailto:your.email@example.com",
       color: "text-red-500",
     },
@@ -36,7 +36,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-20 px-4 bg-black/10 backdrop-blur-sm" ref={ref}>
+    <section id="contact" className="py-20 px-4" ref={ref}>
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -44,9 +44,9 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Get In Touch</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">Get In Touch</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            I'm always open to discussing new projects, opportunities, or collaborations. 
+            I'm always open to discussing new projects, opportunities, or collaborations.
             Feel free to reach out through any of these channels.
           </p>
         </motion.div>
@@ -59,7 +59,7 @@ export default function Contact() {
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
-              <Card className="hover:shadow-lg transition-shadow h-full backdrop-blur-sm">
+              <Card className="hover:shadow-lg transition-shadow h-full">
                 <CardHeader>
                   <div className={`${method.color} mb-2`}>{method.icon}</div>
                   <CardTitle>{method.title}</CardTitle>
