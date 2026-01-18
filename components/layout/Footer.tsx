@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, Linkedin, Mail, Heart } from "lucide-react";
+import { Github, Linkedin, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Footer() {
@@ -40,14 +40,7 @@ export default function Footer() {
                 <Linkedin className="h-5 w-5" />
               </a>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href="mailto:your.email@example.com"
-                aria-label="Email"
-              >
-                <Mail className="h-5 w-5" />
-              </a>
-            </Button>
+
           </div>
         </div>
 

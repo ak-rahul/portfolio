@@ -1,9 +1,7 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -12,13 +10,6 @@ export default function Contact() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const contactMethods = [
-    {
-      icon: <Mail className="h-6 w-6" />,
-      title: "Email",
-      description: "Click to send me a message",
-      href: "mailto:your.email@example.com",
-      color: "text-red-500",
-    },
     {
       icon: <Github className="h-6 w-6" />,
       title: "GitHub",
@@ -51,7 +42,7 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+        <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
           {contactMethods.map((method, idx) => (
             <motion.div
               key={method.title}

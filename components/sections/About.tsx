@@ -22,8 +22,8 @@ export default function About() {
     },
     {
       icon: <Award className="h-6 w-6" />,
-      title: "Certified Developer",
-      description: "Pursuing Agentic AI Developer Certification from ReadyTensor",
+      title: "Certified Agentic AI Developer",
+      description: "Certified by Ready Tensor",
     },
   ];
 

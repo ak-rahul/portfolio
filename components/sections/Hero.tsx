@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { Github, Linkedin, Mail, ExternalLink, ArrowRight } from "lucide-react";
+import { Github, Linkedin, ExternalLink, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Hero() {
@@ -86,7 +86,6 @@ export default function Hero() {
           >
             <SocialLink href="https://github.com/ak-rahul" icon={<Github className="h-6 w-6" />} label="GitHub" />
             <SocialLink href="https://www.linkedin.com/in/ak-rahul" icon={<Linkedin className="h-6 w-6" />} label="LinkedIn" />
-            <SocialLink href="mailto:your.email@example.com" icon={<Mail className="h-6 w-6" />} label="Email" />
           </motion.div>
         </motion.div>
       </div>
