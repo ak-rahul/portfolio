@@ -41,47 +41,32 @@ export default function StarryBackground() {
     };
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Helper functions
-    const drawStar = (star: Star) => {
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${starRgb}, ${star.opacity})`;
-      ctx.fill();
-    };
+    // Nebula/Aurora params
+    let time = 0;
 
-    const updateStar = (star: Star) => {
-      // Twinkle effect
-      if (star.increasing) {
-        star.opacity += star.twinkleSpeed;
-        if (star.opacity >= 1) star.increasing = false;
-      } else {
-        star.opacity -= star.twinkleSpeed;
-        if (star.opacity <= 0.2) star.increasing = true;
-      }
+    const drawNebula = () => {
+      if (!isDark) return;
 
-      // Add motion
-      star.x += star.vx;
-      star.y += star.vy;
+      const width = canvas.width;
+      const height = canvas.height;
 
-      // Screen wrapping
-      if (star.x < 0) star.x = canvas.width;
-      if (star.x > canvas.width) star.x = 0;
-      if (star.y < 0) star.y = canvas.height;
-      if (star.y > canvas.height) star.y = 0;
+      // Create swaying gradients
+      const gradient1 = ctx.createRadialGradient(
+        width * 0.5 + Math.sin(time * 0.0005) * 200,
+        height * 0.5 + Math.cos(time * 0.0005) * 200,
+        0,
+        width * 0.5,
+        height * 0.5,
+        width * 1.5
+      );
 
-      // Mouse interaction: subtle parallax/movement away from mouse
-      const dx = mouseRef.current.x - star.x;
-      const dy = mouseRef.current.y - star.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const maxDist = 100;
+      // Deep purple/blue glow
+      gradient1.addColorStop(0, "rgba(76, 29, 149, 0.05)"); // Deep purple
+      gradient1.addColorStop(0.5, "rgba(59, 130, 246, 0.03)"); // Blue
+      gradient1.addColorStop(1, "rgba(0, 0, 0, 0)");
 
-      if (distance < maxDist) {
-        const force = (maxDist - distance) / maxDist;
-        star.x -= (dx / distance) * force * 0.5;
-        star.y -= (dy / distance) * force * 0.5;
-      }
-
-      drawStar(star);
+      ctx.fillStyle = gradient1;
+      ctx.fillRect(0, 0, width, height);
     };
 
     const drawShootingStar = (star: ShootingStar) => {
@@ -116,7 +101,6 @@ export default function StarryBackground() {
       drawShootingStar(star);
     };
 
-    // Constellation effect: Draw lines between nearby stars
     const drawConstellations = (stars: Star[]) => {
       for (let i = 0; i < stars.length; i++) {
         for (let j = i + 1; j < stars.length; j++) {
@@ -126,7 +110,6 @@ export default function StarryBackground() {
 
           if (distance < 100) {
             ctx.beginPath();
-            // Reduced visibility for subtler connections
             const visibilityFactor = isDark ? 0.05 : 0.2;
             ctx.strokeStyle = `rgba(${lineRgb}, ${visibilityFactor * (1 - distance / 100)})`;
             ctx.lineWidth = 0.5;
@@ -139,18 +122,23 @@ export default function StarryBackground() {
     };
 
     const createStar = (): Star => {
+      const colors = isDark
+        ? ["255, 255, 255", "200, 200, 255", "220, 240, 255"]
+        : ["0, 0, 0", "20, 20, 50", "0, 0, 50"];
+
       return {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.2, // Random slow velocity x
-        vy: (Math.random() - 0.5) * 0.2, // Random slow velocity y
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
         radius: Math.random() * 1.5 + 0.5,
         opacity: Math.random(),
         twinkleSpeed: Math.random() * 0.02 + 0.005,
         increasing: Math.random() > 0.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
         draw: () => { },
         update: () => { }
-      };
+      } as any;
     };
 
     const createShootingStar = (): ShootingStar => {
@@ -176,10 +164,45 @@ export default function StarryBackground() {
       return star;
     };
 
+    const updateStar = (star: any) => {
+      if (star.increasing) {
+        star.opacity += star.twinkleSpeed;
+        if (star.opacity >= 1) star.increasing = false;
+      } else {
+        star.opacity -= star.twinkleSpeed;
+        if (star.opacity <= 0.2) star.increasing = true;
+      }
+
+      star.x += star.vx;
+      star.y += star.vy;
+
+      if (star.x < 0) star.x = canvas.width;
+      if (star.x > canvas.width) star.x = 0;
+      if (star.y < 0) star.y = canvas.height;
+      if (star.y > canvas.height) star.y = 0;
+
+      const dx = mouseRef.current.x - star.x;
+      const dy = mouseRef.current.y - star.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDist = 150;
+
+      if (distance < maxDist) {
+        const force = (maxDist - distance) / maxDist;
+        star.x -= (dx / distance) * force * 0.8;
+        star.y -= (dy / distance) * force * 0.8;
+      }
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      const color = star.color || starRgb;
+      ctx.fillStyle = `rgba(${color}, ${star.opacity})`;
+      ctx.fill();
+    };
+
     // Initialize stars
-    // Increased count slightly for better constellations
-    const stars: Star[] = [];
-    for (let i = 0; i < 350; i++) {
+    const starCount = Math.floor((window.innerWidth * window.innerHeight) / 6000);
+    const stars: any[] = [];
+    for (let i = 0; i < starCount; i++) {
       stars.push(createStar());
     }
 
@@ -192,6 +215,10 @@ export default function StarryBackground() {
     let animationFrameId: number;
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      time++;
+
+      drawNebula();
 
       stars.forEach(s => updateStar(s));
       drawConstellations(stars);

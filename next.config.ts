@@ -9,9 +9,7 @@ const nextConfig: any = {
       { protocol: 'https', hostname: 'raw.githubusercontent.com' },
     ],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+
   typescript: {
     ignoreBuildErrors: true,
   },
