@@ -25,6 +25,11 @@ export default function About() {
       title: "Certified Agentic AI Developer",
       description: "Certified by Ready Tensor",
     },
+    {
+      icon: <Award className="h-6 w-6" />,
+      title: "Google Data Analytics Professional",
+      description: "Certified by Coursera",
+    },
   ];
 
   return (

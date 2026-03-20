@@ -54,4 +54,22 @@ export const projects = [
     github: "https://github.com/ak-rahul/Steganography-Project",
     featured: true,
   },
+  {
+    id: 7,
+    title: "Totally Not Sarcastic",
+    description: "Context-aware sarcasm detection using RoBERTa",
+    longDescription: "A machine learning pipeline for context-aware sarcasm detection. Trained on Reddit SARC data using RoBERTa and deployed as an interactive dashboard on HuggingFace Spaces. Features include comprehensive evaluation metrics and LIME explainability.",
+    tech: ["Python", "RoBERTa", "HuggingFace", "PyTorch", "Streamlit"],
+    github: "https://github.com/ak-rahul/totally-not-sarcastic",
+    featured: true,
+  },
+  {
+    id: 8,
+    title: "Vehicle Service Simulator",
+    description: "Hybrid simulation platform for vehicle service centers",
+    longDescription: "A comprehensive simulation platform designed to model and optimize vehicle service center operations. Features both a command-line interface and an interactive web dashboard to visualize advanced queueing and resource allocation metrics.",
+    tech: ["Python", "Simulation", "Web Dashboard", "Data Analytics", "CLI"],
+    github: "https://github.com/ak-rahul/vehicle-service-sim",
+    featured: true,
+  },
 ];
