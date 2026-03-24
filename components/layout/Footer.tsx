@@ -1,57 +1,59 @@
 "use client";
 
-import { Github, Linkedin, Heart } from "lucide-react";
+import { Github, Linkedin, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t py-8 px-4 bg-black/20 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+    <footer className="relative z-10 border-t border-white/[0.06] mt-8">
+      {/* Subtle glow line at top */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-px bg-gradient-to-r from-transparent via-[oklch(0.72_0.19_295/0.5)] to-transparent" />
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Left: Brand & copy */}
           <div className="text-center md:text-left">
-            <p className="text-sm text-muted-foreground flex items-center gap-1 justify-center md:justify-start">
-              Built with <Heart className="h-4 w-4 text-red-500 fill-red-500" /> using Next.js, TypeScript & Tailwind CSS
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              © {currentYear} AK Rahul. All rights reserved.
+            <p className="font-display font-bold text-sm glow-text-violet mb-1">ak-rahul</p>
+            <p className="text-xs text-white/30">
+              © {year} AK Rahul. Built with Next.js, TypeScript & Tailwind CSS.
             </p>
           </div>
 
-          <div className="flex gap-2">
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href="https://github.com/ak-rahul"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-              >
-                <Github className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href="https://www.linkedin.com/in/ak-rahul"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </Button>
+          {/* Right: socials + back to top */}
+          <div className="flex items-center gap-3">
+            <a
+              href="https://github.com/ak-rahul"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+            >
+              <Github className="h-4 w-4" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ak-rahul"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+            >
+              <Linkedin className="h-4 w-4" />
+            </a>
 
+            <div className="w-px h-5 bg-white/[0.08] mx-1" />
+
+            <motion.button
+              whileHover={{ y: -2 }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-white/40 hover:text-white rounded-lg hover:bg-white/[0.06] transition-all duration-200 border border-white/[0.06] hover:border-white/[0.12]"
+            >
+              <ArrowUp className="h-3 w-3" />
+              Top
+            </motion.button>
           </div>
-        </div>
-
-        <div className="text-center mt-6">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            Back to Top ↑
-          </Button>
         </div>
       </div>
     </footer>
