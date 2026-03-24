@@ -1,256 +1,196 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useTheme } from "next-themes";
-import { Star, ShootingStar } from "@/types";
+import { useEffect, useRef, useCallback } from "react";
+
+interface Star {
+  x: number;
+  y: number;
+  radius: number;
+  opacity: number;
+  twinkleSpeed: number;
+  twinkleDir: 1 | -1;
+}
+
+interface ShootingStar {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  length: number;
+  opacity: number;
+  life: number;
+  maxLife: number;
+}
+
+const STAR_COUNT_DENSITY = 8000; // px² per star — lower = more stars
+
+function makeShootingStar(w: number, h: number): ShootingStar {
+  const angle = (Math.PI / 180) * (30 + Math.random() * 20);
+  const speed = 6 + Math.random() * 8;
+  const maxLife = 60 + Math.random() * 60;
+  return {
+    x: Math.random() * w * 0.8,
+    y: Math.random() * h * 0.4,
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
+    length: 80 + Math.random() * 120,
+    opacity: 1,
+    life: maxLife,
+    maxLife,
+  };
+}
 
 export default function StarryBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { theme, systemTheme } = useTheme();
+  const starsRef = useRef<Star[]>([]);
+  const shootingStarsRef = useRef<ShootingStar[]>([]);
+  const rafRef = useRef<number>(0);
+  const spawnTimerRef = useRef<number>(0);
 
-  // Store mouse position in a ref to persist across renders without re-triggering effect
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const initStars = useCallback((w: number, h: number) => {
+    const count = Math.ceil((w * h) / STAR_COUNT_DENSITY);
+    starsRef.current = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      radius: Math.random() * 1.4 + 0.3,
+      opacity: Math.random() * 0.5 + 0.2,
+      twinkleSpeed: 0.003 + Math.random() * 0.008,
+      twinkleDir: (Math.random() > 0.5 ? 1 : -1) as 1 | -1,
+    }));
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    // Determine current theme color
-    const currentTheme = theme === "system" ? systemTheme : theme;
-    const isDark = currentTheme === "dark";
-
-    // Configure colors based on theme
-    const starRgb = isDark ? "255, 255, 255" : "0, 0, 0";
-    const lineRgb = isDark ? "255, 255, 255" : "0, 0, 0";
-    const shootingStarColorInfo = isDark ? "255, 255, 255" : "59, 130, 246";
-
-    // Set canvas size
-    const setCanvasSize = () => {
+    const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      initStars(canvas.width, canvas.height);
     };
-    setCanvasSize();
-    window.addEventListener("resize", setCanvasSize);
+    resize();
 
-    // Track mouse movement
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    window.addEventListener("mousemove", handleMouseMove);
+    const ro = new ResizeObserver(resize);
+    ro.observe(document.documentElement);
 
-    // Nebula/Aurora params
-    let time = 0;
+    // ─── Draw frame ───
+    const draw = () => {
+      const { width: w, height: h } = canvas;
+      ctx.clearRect(0, 0, w, h);
 
-    const drawNebula = () => {
-      if (!isDark) return;
+      // Background gradient (aurora blobs via compositing)
+      // Blob 1 — violet, top-left area
+      const g1 = ctx.createRadialGradient(w * 0.2, h * 0.15, 0, w * 0.2, h * 0.15, w * 0.5);
+      g1.addColorStop(0, "rgba(139,92,246,0.10)");
+      g1.addColorStop(1, "rgba(139,92,246,0)");
+      ctx.fillStyle = g1;
+      ctx.fillRect(0, 0, w, h);
 
-      const width = canvas.width;
-      const height = canvas.height;
+      // Blob 2 — emerald, bottom-right
+      const g2 = ctx.createRadialGradient(w * 0.8, h * 0.75, 0, w * 0.8, h * 0.75, w * 0.45);
+      g2.addColorStop(0, "rgba(52,211,153,0.08)");
+      g2.addColorStop(1, "rgba(52,211,153,0)");
+      ctx.fillStyle = g2;
+      ctx.fillRect(0, 0, w, h);
 
-      // Create swaying gradients
-      const gradient1 = ctx.createRadialGradient(
-        width * 0.5 + Math.sin(time * 0.0005) * 200,
-        height * 0.5 + Math.cos(time * 0.0005) * 200,
-        0,
-        width * 0.5,
-        height * 0.5,
-        width * 1.5
-      );
+      // Blob 3 — indigo, centre-top subtle
+      const g3 = ctx.createRadialGradient(w * 0.55, h * 0.1, 0, w * 0.55, h * 0.1, w * 0.35);
+      g3.addColorStop(0, "rgba(99,102,241,0.06)");
+      g3.addColorStop(1, "rgba(99,102,241,0)");
+      ctx.fillStyle = g3;
+      ctx.fillRect(0, 0, w, h);
 
-      // Deep purple/blue glow
-      gradient1.addColorStop(0, "rgba(76, 29, 149, 0.05)"); // Deep purple
-      gradient1.addColorStop(0.5, "rgba(59, 130, 246, 0.03)"); // Blue
-      gradient1.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-      ctx.fillStyle = gradient1;
-      ctx.fillRect(0, 0, width, height);
-    };
-
-    const drawShootingStar = (star: ShootingStar) => {
-      const gradient = ctx.createLinearGradient(
-        star.x,
-        star.y,
-        star.x - Math.cos(star.angle) * star.length,
-        star.y - Math.sin(star.angle) * star.length
-      );
-      gradient.addColorStop(0, `rgba(${shootingStarColorInfo}, ${star.opacity})`);
-      gradient.addColorStop(1, `rgba(${shootingStarColorInfo}, 0)`);
-
-      ctx.beginPath();
-      ctx.strokeStyle = gradient;
-      ctx.lineWidth = 2;
-      ctx.moveTo(star.x, star.y);
-      ctx.lineTo(
-        star.x - Math.cos(star.angle) * star.length,
-        star.y - Math.sin(star.angle) * star.length
-      );
-      ctx.stroke();
-    };
-
-    const updateShootingStar = (star: ShootingStar) => {
-      star.x += Math.cos(star.angle) * star.speed;
-      star.y += Math.sin(star.angle) * star.speed;
-      star.opacity -= 0.01;
-
-      if (star.opacity <= 0 || star.x > canvas.width || star.y > canvas.height) {
-        star.reset();
-      }
-      drawShootingStar(star);
-    };
-
-    const drawConstellations = (stars: Star[]) => {
+      // ─── Stars ───
+      const stars = starsRef.current;
       for (let i = 0; i < stars.length; i++) {
-        for (let j = i + 1; j < stars.length; j++) {
-          const dx = stars[i].x - stars[j].x;
-          const dy = stars[i].y - stars[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+        const s = stars[i];
+        s.opacity += s.twinkleSpeed * s.twinkleDir;
+        if (s.opacity >= 0.85 || s.opacity <= 0.1) s.twinkleDir *= -1;
 
-          if (distance < 100) {
-            ctx.beginPath();
-            const visibilityFactor = isDark ? 0.05 : 0.2;
-            ctx.strokeStyle = `rgba(${lineRgb}, ${visibilityFactor * (1 - distance / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(stars[i].x, stars[i].y);
-            ctx.lineTo(stars[j].x, stars[j].y);
-            ctx.stroke();
-          }
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        // Slight violet tint for larger stars
+        const tint = s.radius > 1.0
+          ? `rgba(200,185,255,${s.opacity})`
+          : `rgba(255,255,255,${s.opacity})`;
+        ctx.fillStyle = tint;
+        ctx.fill();
+      }
+
+      // ─── Shooting stars ───
+      spawnTimerRef.current++;
+      if (spawnTimerRef.current > 120 + Math.random() * 180) {
+        spawnTimerRef.current = 0;
+        if (shootingStarsRef.current.length < 3) {
+          shootingStarsRef.current.push(makeShootingStar(w, h));
         }
       }
-    };
 
-    const createStar = (): Star => {
-      const colors = isDark
-        ? ["255, 255, 255", "200, 200, 255", "220, 240, 255"]
-        : ["0, 0, 0", "20, 20, 50", "0, 0, 50"];
+      const alive: ShootingStar[] = [];
+      for (const ss of shootingStarsRef.current) {
+        ss.x += ss.vx;
+        ss.y += ss.vy;
+        ss.life--;
+        ss.opacity = ss.life / ss.maxLife;
 
-      return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
-        radius: Math.random() * 1.5 + 0.5,
-        opacity: Math.random(),
-        twinkleSpeed: Math.random() * 0.02 + 0.005,
-        increasing: Math.random() > 0.5,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        draw: () => { },
-        update: () => { }
-      } as any;
-    };
+        if (ss.life > 0 && ss.x < w + 200 && ss.y < h + 200) {
+          // Draw trail
+          const grad = ctx.createLinearGradient(
+            ss.x, ss.y,
+            ss.x - ss.vx * (ss.length / Math.hypot(ss.vx, ss.vy)),
+            ss.y - ss.vy * (ss.length / Math.hypot(ss.vx, ss.vy))
+          );
+          grad.addColorStop(0, `rgba(220,210,255,${ss.opacity})`);
+          grad.addColorStop(0.4, `rgba(180,160,255,${ss.opacity * 0.6})`);
+          grad.addColorStop(1, "rgba(139,92,246,0)");
 
-    const createShootingStar = (): ShootingStar => {
-      const star: ShootingStar = {
-        x: 0,
-        y: 0,
-        length: 0,
-        speed: 0,
-        opacity: 0,
-        angle: 0,
-        reset: function () {
-          this.x = Math.random() * canvas.width;
-          this.y = Math.random() * (canvas.height / 2);
-          this.length = Math.random() * 80 + 40;
-          this.speed = Math.random() * 10 + 6;
-          this.opacity = 1;
-          this.angle = Math.PI / 4;
-        },
-        draw: () => { },
-        update: () => { }
-      };
-      star.reset();
-      return star;
-    };
+          ctx.beginPath();
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.5;
+          ctx.lineCap = "round";
+          ctx.moveTo(ss.x, ss.y);
+          ctx.lineTo(
+            ss.x - ss.vx * (ss.length / Math.hypot(ss.vx, ss.vy)),
+            ss.y - ss.vy * (ss.length / Math.hypot(ss.vx, ss.vy))
+          );
+          ctx.stroke();
 
-    const updateStar = (star: any) => {
-      if (star.increasing) {
-        star.opacity += star.twinkleSpeed;
-        if (star.opacity >= 1) star.increasing = false;
-      } else {
-        star.opacity -= star.twinkleSpeed;
-        if (star.opacity <= 0.2) star.increasing = true;
-      }
+          // Head glow
+          const headGlow = ctx.createRadialGradient(ss.x, ss.y, 0, ss.x, ss.y, 4);
+          headGlow.addColorStop(0, `rgba(255,255,255,${ss.opacity * 0.9})`);
+          headGlow.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = headGlow;
+          ctx.beginPath();
+          ctx.arc(ss.x, ss.y, 4, 0, Math.PI * 2);
+          ctx.fill();
 
-      star.x += star.vx;
-      star.y += star.vy;
-
-      if (star.x < 0) star.x = canvas.width;
-      if (star.x > canvas.width) star.x = 0;
-      if (star.y < 0) star.y = canvas.height;
-      if (star.y > canvas.height) star.y = 0;
-
-      const dx = mouseRef.current.x - star.x;
-      const dy = mouseRef.current.y - star.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const maxDist = 150;
-
-      if (distance < maxDist) {
-        const force = (maxDist - distance) / maxDist;
-        star.x -= (dx / distance) * force * 0.8;
-        star.y -= (dy / distance) * force * 0.8;
-      }
-
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-      const color = star.color || starRgb;
-      ctx.fillStyle = `rgba(${color}, ${star.opacity})`;
-      ctx.fill();
-    };
-
-    // Initialize stars
-    const starCount = Math.floor((window.innerWidth * window.innerHeight) / 6000);
-    const stars: any[] = [];
-    for (let i = 0; i < starCount; i++) {
-      stars.push(createStar());
-    }
-
-    // Initialize shooting stars
-    const shootingStars: ShootingStar[] = [];
-    for (let i = 0; i < 3; i++) {
-      shootingStars.push(createShootingStar());
-    }
-
-    let animationFrameId: number;
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      time++;
-
-      drawNebula();
-
-      stars.forEach(s => updateStar(s));
-      drawConstellations(stars);
-
-      if (Math.random() < 0.01 && shootingStars.length < 5) {
-        shootingStars.push(createShootingStar());
-      }
-
-      shootingStars.forEach((s, index) => {
-        updateShootingStar(s);
-        if (s.opacity <= 0) {
-          shootingStars.splice(index, 1);
+          alive.push(ss);
         }
-      });
+      }
+      shootingStarsRef.current = alive;
 
-      animationFrameId = requestAnimationFrame(animate);
+      rafRef.current = requestAnimationFrame(draw);
     };
 
-    animate();
+    rafRef.current = requestAnimationFrame(draw);
 
     return () => {
-      window.removeEventListener("resize", setCanvasSize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(rafRef.current);
+      ro.disconnect();
     };
-  }, [theme, systemTheme]);
+  }, [initStars]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full -z-10 bg-background transition-colors duration-500"
-      style={{ pointerEvents: "none" }}
+      aria-hidden="true"
+      className="fixed inset-0 w-full h-full -z-10"
+      style={{
+        background: "oklch(0.07 0.03 275)",
+        pointerEvents: "none",
+      }}
     />
   );
 }
