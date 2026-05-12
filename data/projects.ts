@@ -72,4 +72,15 @@ export const projects = [
     github: "https://github.com/ak-rahul/vehicle-service-sim",
     featured: true,
   },
+  {
+    id: 9,
+    title: "AEO Diagnostic",
+    description: "AI-powered automotive diagnostics and multi-model analysis platform",
+    longDescription:
+      "A production-oriented AI diagnostic platform designed for automotive troubleshooting and intelligent issue analysis. Features a multi-model AI routing system, FastAPI backend services, real-time diagnostics workflows, and modular architecture for scalable integrations. Includes Dockerized deployment, API orchestration, and extensible agent-based processing pipelines.",
+    tech: [
+      "Python", "FastAPI", "AI Agents", "LLMs", "REST APIs","Streamlit"],
+    github: "https://github.com/ak-rahul/aeo-diagnostic",
+    featured: true,
+  },
 ];
