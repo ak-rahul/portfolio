@@ -38,11 +38,11 @@ export const projects = [
   },
   {
     id: 5,
-    title: "Mandi Price Predictor",
-    description: "ML-powered agricultural commodity price forecasting system",
-    longDescription: "Machine learning application that predicts market prices for agricultural commodities. Analyzes historical data and market trends to provide accurate price forecasts, helping farmers and traders make informed decisions.",
+    title: "KrishiSight",
+    description: "ML-powered mandi price predictor for agricultural commodities",
+    longDescription: "Machine learning application that predicts mandi (market) prices for agricultural commodities. Analyzes historical data and market trends to provide accurate price forecasts, helping farmers and traders make informed decisions.",
     tech: ["Python", "Scikit-learn", "Pandas", "Streamlit", "Matplotlib"],
-    github: "https://github.com/ak-rahul/mandi-price-predictor",
+    github: "https://github.com/ak-rahul/KrishiSight",
     featured: true,
   },
   {

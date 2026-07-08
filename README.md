@@ -5,7 +5,7 @@ Welcome to my personal portfolio codebase. This modern, high-performance web app
 
 -   **Agentic AI Focus**: Highlighted certification and specialized skills in Multi-Agent Systems, LangChain, and RAG.
 -   **Immersive UI**: Custom "Starry Night" background with interactive constellations and smooth Framer Motion animations.
--   **Static & Fast**: Built with Next.js App Router and Static Export for blazing fast performance on Vercel/Netlify.
+-   **Fast**: Built with Next.js App Router for blazing fast performance on Vercel/Netlify.
 -   **Responsive Design**: Fully responsive layout tailored for all devices.
 -   **Privacy Focused**: Contact section optimized for privacy (no email scraping).
 
@@ -43,4 +43,4 @@ This project is optimized for deployment on **Vercel** or **Netlify**.
 
 1.  Push your code to GitHub.
 2.  Import the project into Vercel/Netlify.
-3.  The build command `npm run build` will generate a static optimized output.
+3.  The build command `npm run build` will generate an optimized production build.

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { Github, Package, ExternalLink, ArrowUpRight } from "lucide-react";
+import { Github, Package, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -160,7 +160,6 @@ export default function Projects() {
 
         {/* Project grid */}
         <motion.div
-          ref={ref}
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}

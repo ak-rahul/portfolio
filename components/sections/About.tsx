@@ -1,10 +1,11 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useInView, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useInView, useTransform, type Variants } from "framer-motion";
 import { useRef, useEffect } from "react";
-import { Award, Code2, Rocket, GitBranch } from "lucide-react";
+import { Award, Code2, Rocket } from "lucide-react";
 import { GlowCard } from "@/components/ui/GlowCard";
 import { Badge } from "@/components/ui/badge";
+import { projects } from "@/data/projects";
 
 const highlights = [
   {
@@ -64,7 +65,7 @@ export default function About() {
     visible: { transition: { staggerChildren: 0.1 } },
   };
 
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
     visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
   };
@@ -120,7 +121,7 @@ export default function About() {
 
               {/* Stats */}
               <div className="flex gap-12 pt-4 border-t border-white/[0.06]">
-                <AnimatedCounter target={6} label="Projects" />
+                <AnimatedCounter target={projects.length} label="Projects" />
                 <div className="text-center">
                   <div className="text-3xl md:text-4xl font-display font-bold glow-text-violet">100%</div>
                   <div className="text-xs text-white/40 mt-1 font-medium tracking-wide uppercase">Open Source</div>

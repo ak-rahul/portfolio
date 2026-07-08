@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
 import { Code2, Brain, Globe, Container, Database } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { GlowCard } from "@/components/ui/GlowCard";
@@ -28,7 +28,7 @@ const containerVariants = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
   visible: {
     opacity: 1, y: 0, filter: "blur(0px)",
@@ -36,7 +36,7 @@ const cardVariants = {
   },
 };
 
-const badgeVariants = {
+const badgeVariants: Variants = {
   hidden: { opacity: 0, scale: 0.85 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: "easeOut" } },
 };
