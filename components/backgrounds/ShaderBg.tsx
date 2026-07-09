@@ -99,12 +99,19 @@ export default function ShaderBg() {
     const compile = (type: number, src: string) => {
       const s = gl.createShader(type)!;
       gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error("ShaderBg: shader compile error", gl.getShaderInfoLog(s));
+      }
       return s;
     };
     const prog = gl.createProgram()!;
     gl.attachShader(prog, compile(gl.VERTEX_SHADER,   VERT));
     gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
     gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.error("ShaderBg: program link error", gl.getProgramInfoLog(prog));
+      return;
+    }
     gl.useProgram(prog);
 
     // Full-screen quad
@@ -127,7 +134,7 @@ export default function ShaderBg() {
     const ro = new ResizeObserver(resize);
     ro.observe(document.documentElement);
 
-    let start = performance.now();
+    const start = performance.now();
     const render = (now: number) => {
       gl.uniform1f(uTime, (now - start) / 1000);
       gl.uniform2f(uRes, canvas.width, canvas.height);

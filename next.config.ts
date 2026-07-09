@@ -3,15 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: false,
   compress: true,
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "github.com" },
-      { protocol: "https", hostname: "raw.githubusercontent.com" },
-    ],
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   headers: async () => [
     {
       source: "/(.*)",
