@@ -1,46 +1,45 @@
 # Portfolio
-Welcome to my personal portfolio codebase. This modern, high-performance web application showcases my work as a **Certified Agentic AI Developer** by Ready Tensor.
 
-## 🚀 Key Features
+Personal portfolio site for AK Rahul — AI Developer & Agentic Systems Engineer. A single-page Next.js site showcasing projects, skills, and background in multi-agent systems, LangChain, and RAG.
 
--   **Agentic AI Focus**: Highlighted certification and specialized skills in Multi-Agent Systems, LangChain, and RAG.
--   **Immersive UI**: Custom "Starry Night" background with interactive constellations and smooth Framer Motion animations.
--   **Fast**: Built with Next.js App Router for blazing fast performance on Vercel/Netlify.
--   **Responsive Design**: Fully responsive layout tailored for all devices.
--   **Privacy Focused**: Contact section optimized for privacy (no email scraping).
+## Tech stack
 
-## 🛠️ Tech Stack
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/) components
+- **Motion**: [Lenis](https://github.com/darkroomengineering/lenis) for inertial smooth scroll, scroll-triggered reveals via `IntersectionObserver`
+- **Fonts**: Newsreader (display), IBM Plex Sans (body), IBM Plex Mono (labels), via `next/font/google`
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Language**: TypeScript
 
--   **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
--   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
--   **Animations**: [Framer Motion](https://www.framer.com/motion/)
--   **Icons**: [Lucide React](https://lucide.dev/)
--   **Language**: TypeScript
+## Design
 
-## 🏎️ Getting Started
+Warm stone/parchment palette with a single deep ink-teal accent, hairline-rule layout, no decorative canvas backgrounds. Light mode only. See [CLAUDE.md](./CLAUDE.md) for the full design rationale and architecture notes.
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/ak-rahul/portfolio.git
-    cd portfolio
-    ```
+## Getting started
 
-2.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
+```bash
+git clone https://github.com/ak-rahul/portfolio.git
+cd portfolio
+npm install
+npm run dev
+```
 
-3.  **Run the development server**:
-    ```bash
-    npm run dev
-    ```
+Open [http://localhost:3000](http://localhost:3000).
 
-4.  **Open** [http://localhost:3000](http://localhost:3000) with your browser.
+## Commands
 
-## 📦 Deployment
+```bash
+npm run dev      # Start dev server
+npm run build    # Production build
+npm run start    # Serve production build
+npm run lint     # ESLint
+npx tsc --noEmit # Type check
+```
 
-This project is optimized for deployment on **Vercel** or **Netlify**.
+## Deployment
 
-1.  Push your code to GitHub.
-2.  Import the project into Vercel/Netlify.
-3.  The build command `npm run build` will generate an optimized production build.
+Deploys to [Vercel](https://vercel.com/) with zero extra configuration — push to `main` and Vercel builds and deploys automatically. `.github/workflows/ci.yml` runs lint, typecheck, and build on every push/PR to `main`/`dev` as a separate check; it doesn't deploy anything.
+
+## Content
+
+Project list and skill categories live in `data/projects.ts` and `data/skills.ts` as plain typed arrays — update those files, not the section components, to change what's displayed.
