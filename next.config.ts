@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: false,
   compress: true,
+  poweredByHeader: false,
   headers: async () => [
     {
       source: "/(.*)",
