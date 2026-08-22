@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect } from "react";
 import Navigation from "@/components/layout/Navigation";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -10,10 +7,6 @@ import Contact from "@/components/sections/Contact";
 import Footer from "@/components/layout/Footer";
 
 export default function Home() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <main className="min-h-screen">
       <Navigation />

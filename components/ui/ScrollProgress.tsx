@@ -2,10 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Scroll progress bar fixed to the top of the page.
- * Width = scrollY / (scrollHeight - innerHeight), no deps.
- */
+/** Thin fixed progress line tied directly to scroll fraction — no easing
+ *  lag, so it stays trustworthy as a position indicator. */
 export function ScrollProgress() {
   const [progress, setProgress] = useState(0);
   const rafRef = useRef<number>(0);
@@ -27,6 +25,7 @@ export function ScrollProgress() {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    update();
     return () => {
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(rafRef.current);
@@ -34,14 +33,11 @@ export function ScrollProgress() {
   }, []);
 
   return (
-    <div
-      className="fixed top-0 left-0 right-0 z-[100] h-[2px] origin-left"
-      style={{
-        background: "linear-gradient(90deg, oklch(0.72 0.19 295), oklch(0.78 0.17 162))",
-        transform: `scaleX(${progress})`,
-        transition: "transform 0.05s linear",
-      }}
-      aria-hidden="true"
-    />
+    <div className="scroll-progress-track" aria-hidden="true">
+      <div
+        className="scroll-progress-bar"
+        style={{ transform: `scaleX(${progress})` }}
+      />
+    </div>
   );
 }

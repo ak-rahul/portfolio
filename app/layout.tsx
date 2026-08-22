@@ -1,25 +1,28 @@
 import type { Metadata } from "next";
-import { Inter, Syne, JetBrains_Mono } from "next/font/google";
+import { Newsreader, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import StarryBackground from "@/components/layout/StarryBackground";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 
-const inter = Inter({
+const newsreader = Newsreader({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-newsreader",
   display: "swap",
+  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
-const syne = Syne({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-ibm-plex-sans",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const jetbrains = JetBrains_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains",
+  variable: "--font-ibm-plex-mono",
   display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 const siteUrl = "https://ak-rahul.vercel.app";
@@ -62,20 +65,13 @@ export const metadata: Metadata = {
     siteName: "AK Rahul Portfolio",
     title: siteTitle,
     description: siteDescription,
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "AK Rahul — AI Developer & Agentic Systems Engineer",
-      },
-    ],
+    // Image comes from app/opengraph-image.tsx (generated at build time) —
+    // Next.js injects it automatically, don't also list a static file here.
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/og-image.png"],
     creator: "@ak_rahul",
   },
   alternates: {
@@ -87,7 +83,7 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#0d0a1a",
+  themeColor: "#EFEBE1",
 };
 
 export default function RootLayout({
@@ -96,16 +92,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className="dark"
-      suppressHydrationWarning
-    >
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${syne.variable} ${jetbrains.variable} font-sans antialiased min-h-screen bg-background text-foreground overflow-x-hidden`}
+        className={`${newsreader.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans antialiased min-h-screen bg-background text-foreground overflow-x-hidden`}
       >
-        <StarryBackground />
-        {children}
+        <div className="grain-overlay" aria-hidden="true" />
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
