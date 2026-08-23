@@ -1,5 +1,6 @@
 import { projects } from "@/data/projects";
 import { Reveal } from "@/components/ui/Reveal";
+import { CountUp } from "@/components/ui/CountUp";
 
 const highlights = [
   {
@@ -24,14 +25,14 @@ const highlights = [
 
 export default function About() {
   return (
-    <section id="about" className="px-5 sm:px-8 py-20 section-rule">
+    <section id="about" className="px-5 sm:px-8 section-rule">
       <div className="max-w-6xl mx-auto">
         <p className="mono-label text-muted-foreground mb-8">About</p>
 
         <Reveal>
         <div className="grid md:grid-cols-12 gap-8 md:gap-10">
           {/* Bio */}
-          <div className="md:col-span-8 space-y-5">
+          <div className="md:col-span-8 space-y-5 max-w-2xl">
             <p className="text-lg leading-relaxed">
               I&apos;m a <span className="font-medium">Full-Stack AI Developer</span>{" "}
               specializing in intelligent agentic systems. My expertise lies in
@@ -58,14 +59,16 @@ export default function About() {
           <div className="md:col-span-4 flex md:flex-col gap-8 md:gap-4 md:border-l md:border-border md:pl-6">
             <div>
               <div className="font-display font-semibold text-4xl">
-                {projects.length}
+                <CountUp end={projects.length} />
               </div>
               <div className="mono-label text-muted-foreground mt-1">
                 Projects
               </div>
             </div>
             <div>
-              <div className="font-display font-semibold text-4xl">100%</div>
+              <div className="font-display font-semibold text-4xl">
+                <CountUp end={100} suffix="%" />
+              </div>
               <div className="mono-label text-muted-foreground mt-1">
                 Open Source
               </div>
@@ -76,7 +79,7 @@ export default function About() {
         {/* Highlights — bordered grid, 2x2 on larger screens */}
         <div className="bordered-grid grid-cols-1 sm:grid-cols-2 mt-14">
           {highlights.map((item) => (
-            <div key={item.title} className="p-6">
+            <div key={item.title} className="row-hover p-6">
               <div className="flex items-start gap-3">
                 <span className="bullet-square mt-1.5" aria-hidden="true" />
                 <div>

@@ -15,18 +15,95 @@ import {
 import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data/projects";
 import { Project } from "@/types";
+import { cn } from "@/lib/utils";
+
+function ProjectIndex({ index, className }: { index: number; className?: string }) {
+  return (
+    <span className={cn("mono-label text-muted-foreground", className)}>
+      {String(index).padStart(2, "0")}
+    </span>
+  );
+}
+
+function TechTags({ tech, className }: { tech: string[]; className?: string }) {
+  return (
+    <div className={cn("flex flex-wrap gap-x-3 gap-y-2", className)}>
+      {tech.map((t) => (
+        <span key={t} className="tag-underline">
+          {t}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+const actionLinkClass =
+  "flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-150";
+
+function ProjectActions({
+  project,
+  onClick,
+  detailsClassName,
+}: {
+  project: Project;
+  onClick: () => void;
+  detailsClassName?: string;
+}) {
+  return (
+    <>
+      <a
+        href={project.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className={actionLinkClass}
+      >
+        <Github className="h-3.5 w-3.5" />
+        Code
+      </a>
+      {project.pypi && (
+        <a
+          href={project.pypi}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className={actionLinkClass}
+        >
+          <Package className="h-3.5 w-3.5" />
+          PyPI
+        </a>
+      )}
+      <button
+        onClick={onClick}
+        className={cn(
+          "group text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-150",
+          detailsClassName
+        )}
+        aria-label={`View details for ${project.title}`}
+      >
+        Details{" "}
+        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+          &rarr;
+        </span>
+      </button>
+    </>
+  );
+}
 
 function ProjectCard({
   project,
+  index,
   onClick,
 }: {
   project: Project;
+  index: number;
   onClick: () => void;
 }) {
   return (
     <Card className="card-lift h-full flex flex-col">
       {/* Header */}
       <CardHeader className="pb-0">
+        <ProjectIndex index={index} className="mb-2 block" />
         <h3 className="font-display font-semibold text-foreground text-lg leading-tight">
           {project.title}
         </h3>
@@ -37,68 +114,88 @@ function ProjectCard({
         <p className="text-sm text-muted-foreground leading-relaxed mb-5">
           {project.description}
         </p>
-        <div className="flex flex-wrap gap-x-3 gap-y-2">
-          {project.tech.map((tech) => (
-            <span key={tech} className="tag-underline">
-              {tech}
-            </span>
-          ))}
-        </div>
+        <TechTags tech={project.tech} />
       </CardContent>
 
       {/* Footer actions */}
       <CardFooter className="gap-4 pt-4 border-t border-border">
-        <a
-          href={project.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-150"
-        >
-          <Github className="h-3.5 w-3.5" />
-          Code
-        </a>
-        {project.pypi && (
-          <a
-            href={project.pypi}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-150"
-          >
-            <Package className="h-3.5 w-3.5" />
-            PyPI
-          </a>
-        )}
-        <button
-          onClick={onClick}
-          className="ml-auto text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-150"
-          aria-label={`View details for ${project.title}`}
-        >
-          Details &rarr;
-        </button>
+        <ProjectActions project={project} onClick={onClick} detailsClassName="ml-auto" />
       </CardFooter>
     </Card>
   );
 }
 
+function ProjectRow({
+  project,
+  index,
+  onClick,
+}: {
+  project: Project;
+  index: number;
+  onClick: () => void;
+}) {
+  return (
+    <div className="row-hover p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start gap-3">
+          <ProjectIndex index={index} className="pt-0.5" />
+          <div className="min-w-0">
+            <h3 className="font-display font-semibold text-foreground text-base leading-tight">
+              {project.title}
+            </h3>
+            <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+              {project.description}
+            </p>
+            <TechTags tech={project.tech} className="mt-3" />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 pl-8 sm:pl-0 shrink-0">
+        <ProjectActions project={project} onClick={onClick} />
+      </div>
+    </div>
+  );
+}
+
+const spotlight = projects.slice(0, 2);
+const rest = projects.slice(2);
+
 export default function Projects() {
   const [selected, setSelected] = useState<Project | null>(null);
 
   return (
-    <section id="projects" className="px-5 sm:px-8 py-20 section-rule">
+    <section id="projects" className="px-5 sm:px-8 section-rule">
       <div className="max-w-6xl mx-auto">
-        <p className="mono-label text-muted-foreground mb-2">Portfolio</p>
-        <h2 className="font-display font-semibold text-2xl sm:text-3xl mb-10">
-          Featured Projects
-        </h2>
+        <Reveal className="mb-10">
+          <h2 className="font-display font-semibold text-2xl sm:text-3xl">
+            Featured Projects
+          </h2>
+          <span className="rule-draw" aria-hidden="true" />
+        </Reveal>
 
-        {/* Project grid */}
+        {/* Spotlight: the two most substantial projects */}
         <Reveal className="grid sm:grid-cols-2 gap-5">
-          {projects.map((project) => (
+          {spotlight.map((project, i) => (
             <ProjectCard
               key={project.id}
               project={project}
+              index={i + 1}
+              onClick={() => setSelected(project)}
+            />
+          ))}
+        </Reveal>
+
+        {/* Rest: compact list, same hairline-divider vocabulary as About's highlights */}
+        <p className="mono-label text-muted-foreground mt-14 mb-4">
+          More Work
+        </p>
+        <Reveal className="bordered-grid grid-cols-1">
+          {rest.map((project, i) => (
+            <ProjectRow
+              key={project.id}
+              project={project}
+              index={i + spotlight.length + 1}
               onClick={() => setSelected(project)}
             />
           ))}

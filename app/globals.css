@@ -1,41 +1,44 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
-/* ─── Refined — synthesis of Ledger + Fieldnotes + Charter, light-only ───
-   One signature deep ink-teal accent, warm refined stone/parchment paper,
-   burnt-sienna secondary reserved for rare, tiny details only. */
+/* ─── Refined — deep botanical palette, light-only ───
+   Adapted from an earthen/organic reference into something closer to a
+   private-library aesthetic: deep bottle-green signature accent, warm
+   ivory paper, cognac secondary reserved for rare, tiny details only.
+   Structure (2px radius, hairline rules, Newsreader/IBM Plex type)
+   unchanged — only the color roles were re-mapped and deepened. */
 @theme {
-  --color-background: #EFEBE1;
-  --color-foreground: #211E19;
+  --color-background: #F6F2E7;
+  --color-foreground: #28241C;
 
-  --color-card: #E7E2D5;
-  --color-card-foreground: #211E19;
+  --color-card: #FBF8F0;
+  --color-card-foreground: #28241C;
 
-  --color-popover: #E7E2D5;
-  --color-popover-foreground: #211E19;
+  --color-popover: #FBF8F0;
+  --color-popover-foreground: #28241C;
 
-  /* Signature accent: deep ink-teal */
-  --color-primary: #2B4459;
-  --color-primary-foreground: #F1EDE3;
+  /* Signature accent: deep bottle green */
+  --color-primary: #3C4F35;
+  --color-primary-foreground: #F3F4F1;
 
-  /* Secondary: muted burnt-sienna — rare, tiny detail color only */
-  --color-secondary: #8B4A32;
-  --color-secondary-foreground: #F1EDE3;
+  /* Secondary: cognac — rare, tiny detail color only */
+  --color-secondary: #9C6B3E;
+  --color-secondary-foreground: #FFFFFF;
 
-  --color-muted: #E7E2D5;
-  --color-muted-foreground: #635C4E;
+  --color-muted: #EEE7D8;
+  --color-muted-foreground: #6E6A5C;
 
-  --color-accent: #E7E2D5;
-  --color-accent-foreground: #211E19;
+  --color-accent: #E3D6BE;
+  --color-accent-foreground: #453F2E;
 
-  --color-destructive: oklch(0.55 0.2 25);
-  --color-destructive-foreground: #F1EDE3;
+  --color-destructive: #9C4A36;
+  --color-destructive-foreground: #F3F4F1;
 
-  --color-border: #D1CABA;
-  --color-input: #E7E2D5;
-  --color-ring: #2B4459;
+  --color-border: #DCD3BE;
+  --color-input: #EEE7D8;
+  --color-ring: #3C4F35;
 
-  --radius: 4px;
+  --radius: 2px;
 
   /* Fonts */
   --font-sans: var(--font-ibm-plex-sans), "Segoe UI", Helvetica, Arial, sans-serif;
@@ -72,26 +75,27 @@
 
 /* ─── Root: always light, no toggle ─── */
 :root {
-  --background: #EFEBE1;
-  --foreground: #211E19;
-  --card: #E7E2D5;
-  --card-foreground: #211E19;
-  --popover: #E7E2D5;
-  --popover-foreground: #211E19;
-  --primary: #2B4459;
-  --primary-foreground: #F1EDE3;
-  --secondary: #8B4A32;
-  --secondary-foreground: #F1EDE3;
-  --muted: #E7E2D5;
-  --muted-foreground: #635C4E;
-  --accent: #E7E2D5;
-  --accent-foreground: #211E19;
-  --destructive: oklch(0.55 0.2 25);
-  --destructive-foreground: #F1EDE3;
-  --border: #D1CABA;
-  --input: #E7E2D5;
-  --ring: #2B4459;
-  --radius: 4px;
+  --background: #F6F2E7;
+  --foreground: #28241C;
+  --card: #FBF8F0;
+  --card-foreground: #28241C;
+  --popover: #FBF8F0;
+  --popover-foreground: #28241C;
+  --primary: #3C4F35;
+  --primary-foreground: #F3F4F1;
+  --secondary: #9C6B3E;
+  --secondary-foreground: #FFFFFF;
+  --muted: #EEE7D8;
+  --muted-foreground: #6E6A5C;
+  --accent: #E3D6BE;
+  --accent-foreground: #453F2E;
+  --destructive: #9C4A36;
+  --destructive-foreground: #F3F4F1;
+  --border: #DCD3BE;
+  --input: #EEE7D8;
+  --ring: #3C4F35;
+  --radius: 2px;
+  --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── Base ─── */
@@ -120,8 +124,20 @@
   }
 
   ::selection {
-    background: #2B4459;
-    color: #F1EDE3;
+    background: #3C4F35;
+    color: #F3F4F1;
+  }
+
+  /* Systemic focus-visible ring for every link/button — Button and
+     .underline-link define their own (more specific) treatment and
+     win over this by specificity, so this only fills the gap for
+     everything else (icon-only socials, whole-card links, plain
+     buttons) without needing an opt-in class on each one. */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }
 
@@ -133,6 +149,47 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-muted-foreground);
+}
+
+/* ─── Utility: ambient background wash (hero only) ───
+   Two huge, heavily-blurred circles reading as pure atmosphere, not shapes
+   — blur(110px)+ erases any visible edge/corner, so this stays compatible
+   with the hairline/sharp-corner system rather than introducing organic
+   blob silhouettes. z-index:-1 keeps it behind the hero's own stacking
+   context regardless of DOM/paint-order technicalities. ─── */
+.ambient-wash {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+  /* Subtle mouse-parallax, set via inline custom properties in Hero.tsx;
+     defaults to motionless so it degrades gracefully with no JS/touch. */
+  transform: translate(var(--wash-x, 0px), var(--wash-y, 0px));
+  transition: transform 600ms var(--ease-glide);
+}
+.ambient-wash::before,
+.ambient-wash::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+}
+.ambient-wash::before {
+  width: 640px;
+  height: 640px;
+  top: -240px;
+  left: -200px;
+  background: var(--color-primary);
+  opacity: 0.14;
+}
+.ambient-wash::after {
+  width: 560px;
+  height: 520px;
+  top: 60px;
+  right: -220px;
+  background: var(--color-secondary);
+  opacity: 0.1;
 }
 
 /* ─── Utility: film grain overlay ───
@@ -158,9 +215,18 @@
   text-transform: uppercase;
 }
 
-/* ─── Utility: section header rule ─── */
+/* ─── Utility: section header rule ───
+   Owns this section's vertical rhythm too, not just the divider — every
+   section that uses this border pairs it with the same py-24/sm:py-28,
+   so the padding belongs here rather than repeated in 4 component files. */
 .section-rule {
   border-top: 1px solid var(--color-border);
+  padding-block: 6rem;
+}
+@media (min-width: 640px) {
+  .section-rule {
+    padding-block: 7rem;
+  }
 }
 
 /* ─── Utility: small filled square bullet (eyebrow / highlight marker) ─── */
@@ -216,11 +282,71 @@
   margin: 0;
 }
 
+/* ─── Utility: breathing availability dot (hero eyebrow) ───
+   Continuous, not scroll-triggered — a "live/available" signal, not a
+   reveal moment. Collapses under the global reduced-motion rule below. */
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.55; }
+}
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+/* ─── Utility: hairline rule that draws in under a section heading ───
+   Width 0 → fixed short width, gated by the same .reveal/.revealed state
+   Reveal.tsx already drives — wrap a heading in its own <Reveal> to use. */
+.rule-draw {
+  display: block;
+  width: 0;
+  height: 1px;
+  margin-top: 14px;
+  background: var(--color-primary);
+  transition: width 900ms var(--ease-glide) 150ms;
+}
+.reveal.revealed .rule-draw {
+  width: 56px;
+}
+
+/* ─── Utility: nav link hover-preview underline ───
+   Distinct from .nav-indicator (the active-link sliding underline driven
+   from JS) — this is a lightweight CSS-only preview for inactive links. */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--color-muted-foreground);
+  transform: scaleX(0);
+  transition: transform 240ms var(--ease-glide);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ─── Utility: row hover tint for ledger-style grids ───
+   About's highlights and Projects' "More Work" list are hairline-divided
+   rows with no hover feedback of their own (unlike the Card-based
+   ProjectCard/Contact tiles, which get .card-lift) — this gives every
+   row in a .bordered-grid the same "you're on this line" affordance. */
+.row-hover {
+  transition: background-color 240ms var(--ease-glide);
+}
+.row-hover:hover {
+  background-color: var(--color-muted);
+}
+
 /* ─── Utility: hairline underline link ─── */
 .underline-link {
   text-decoration: none;
   border-bottom: 1px solid var(--color-border);
-  transition: border-color 180ms ease, color 180ms ease;
+  transition: border-color 240ms var(--ease-glide),
+    color 240ms var(--ease-glide);
 }
 .underline-link:hover,
 .underline-link:focus-visible {
@@ -296,15 +422,18 @@ section {
   pointer-events: none;
 }
 
-/* ─── Card hover lift (projects, contact tiles) ─── */
+/* ─── Card hover lift (projects, contact tiles) ───
+   A slower, softer settle (cubic-bezier expo-out) and a lower, wider
+   shadow read as considered rather than snappy — restraint over bounce. */
 .card-lift {
-  transition: transform 200ms ease, border-color 200ms ease,
-    box-shadow 200ms ease;
+  transition: transform 320ms var(--ease-glide),
+    border-color 320ms var(--ease-glide),
+    box-shadow 320ms var(--ease-glide);
 }
 .card-lift:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--color-primary);
-  box-shadow: 0 10px 24px -12px rgba(43, 68, 89, 0.28);
+  box-shadow: 0 16px 36px -18px rgba(60, 79, 53, 0.24);
 }
 
 /* ─── Mobile touch targets ─── */

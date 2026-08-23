@@ -21,12 +21,14 @@ const contactMethods = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="px-5 sm:px-8 py-20 section-rule">
+    <section id="contact" className="px-5 sm:px-8 section-rule">
       <div className="max-w-6xl mx-auto">
-        <p className="mono-label text-muted-foreground mb-2">Contact</p>
-        <h2 className="font-display font-semibold text-2xl sm:text-3xl mb-4">
-          Get In Touch
-        </h2>
+        <Reveal className="mb-4">
+          <h2 className="font-display font-semibold text-2xl sm:text-3xl">
+            Get In Touch
+          </h2>
+          <span className="rule-draw" aria-hidden="true" />
+        </Reveal>
         <p className="text-muted-foreground text-lg leading-relaxed max-w-xl mb-12">
           I&apos;m always open to discussing new projects, collaborations, or
           just interesting AI conversations. Reach out on any platform below.

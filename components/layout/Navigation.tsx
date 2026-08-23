@@ -104,7 +104,7 @@ export default function Navigation() {
                   href={`#${item.id}`}
                   onClick={(e) => handleClick(e, item.id)}
                   className={cn(
-                    "font-mono text-xs tracking-[0.1em] uppercase pb-0.5 transition-colors duration-150",
+                    "nav-link font-mono text-xs tracking-[0.1em] uppercase pb-0.5 transition-colors duration-150",
                     active === item.id
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"

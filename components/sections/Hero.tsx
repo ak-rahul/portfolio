@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Github, Linkedin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { scrollToId } from "@/lib/utils";
@@ -11,15 +12,37 @@ const certifications = [
 ];
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const washRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const section = sectionRef.current;
+    const wash = washRef.current;
+    if (!section || !wash) return;
+
+    const handleMove = (e: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      wash.style.setProperty("--wash-x", `${x * -18}px`);
+      wash.style.setProperty("--wash-y", `${y * -18}px`);
+    };
+    section.addEventListener("mousemove", handleMove);
+    return () => section.removeEventListener("mousemove", handleMove);
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="home"
-      className="px-5 sm:px-8 pt-32 pb-20 md:pt-40 md:pb-28"
+      className="px-5 sm:px-8 pt-32 pb-24 md:pt-44 md:pb-32"
     >
+      <div ref={washRef} className="ambient-wash" aria-hidden="true" />
       <div className="max-w-6xl mx-auto hero-fade-in">
         {/* Eyebrow */}
         <div className="flex items-center gap-2.5 mb-6">
-          <span className="bullet-square" aria-hidden="true" />
+          <span className="bullet-square pulse-dot" aria-hidden="true" />
           <span className="mono-label text-primary">
             Available for new projects
           </span>
@@ -30,7 +53,7 @@ export default function Hero() {
           <div className="md:col-span-7">
             <h1
               className="font-display font-semibold tracking-tight leading-[1.05]"
-              style={{ fontSize: "clamp(2.6rem, 5.5vw, 4.2rem)" }}
+              style={{ fontSize: "clamp(2.75rem, 6vw, 4.75rem)" }}
             >
               AK Rahul
             </h1>
@@ -52,10 +75,10 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-3 mt-8">
               <Button
                 onClick={() => scrollToId("projects")}
-                className="rounded-[var(--radius)] font-mono text-xs uppercase tracking-[0.08em] h-11 px-6"
+                className="group rounded-[var(--radius)] font-mono text-xs uppercase tracking-[0.08em] h-11 px-6"
               >
                 View My Work
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
               </Button>
               <Button
                 variant="outline"
@@ -89,16 +112,13 @@ export default function Hero() {
             </div>
 
             {/* Certifications */}
-            <ul className="mt-8 space-y-1.5">
+            <div className="chip-row mt-8 font-mono text-[11px] tracking-wide text-muted-foreground">
               {certifications.map((cert) => (
-                <li
-                  key={cert}
-                  className="font-mono text-[11px] tracking-wide text-muted-foreground"
-                >
-                  — {cert}
-                </li>
+                <span key={cert} className="chip-dot">
+                  {cert}
+                </span>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </div>

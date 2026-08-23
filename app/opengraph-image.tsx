@@ -35,17 +35,17 @@ export default async function Image() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "90px",
-          background: "#EFEBE1",
+          background: "#F6F2E7",
           fontFamily: "IBM Plex Sans",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
-          <div style={{ width: 10, height: 10, background: "#2B4459" }} />
+          <div style={{ width: 10, height: 10, background: "#3C4F35" }} />
           <div
             style={{
               fontSize: 20,
               letterSpacing: 5,
-              color: "#2B4459",
+              color: "#3C4F35",
               fontWeight: 600,
             }}
           >
@@ -58,7 +58,7 @@ export default async function Image() {
             fontFamily: "Newsreader",
             fontWeight: 700,
             fontSize: 132,
-            color: "#211E19",
+            color: "#28241C",
             lineHeight: 1,
             marginBottom: 22,
           }}
@@ -72,18 +72,18 @@ export default async function Image() {
             fontWeight: 500,
             fontStyle: "italic",
             fontSize: 38,
-            color: "#635C4E",
+            color: "#6E6A5C",
             marginBottom: 48,
           }}
         >
           AI Developer &amp; Agentic Systems Engineer
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 24, fontSize: 24, color: "#2B4459", fontWeight: 600 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 24, fontSize: 24, color: "#3C4F35", fontWeight: 600 }}>
           <div style={{ display: "flex" }}>LangChain</div>
-          <div style={{ display: "flex", color: "#D1CABA" }}>·</div>
+          <div style={{ display: "flex", color: "#DCD3BE" }}>·</div>
           <div style={{ display: "flex" }}>RAG</div>
-          <div style={{ display: "flex", color: "#D1CABA" }}>·</div>
+          <div style={{ display: "flex", color: "#DCD3BE" }}>·</div>
           <div style={{ display: "flex" }}>Multi-Agent Systems</div>
         </div>
       </div>

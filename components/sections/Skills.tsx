@@ -3,18 +3,20 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export default function Skills() {
   return (
-    <section id="skills" className="px-5 sm:px-8 py-20 section-rule">
+    <section id="skills" className="px-5 sm:px-8 section-rule">
       <div className="max-w-6xl mx-auto">
-        <p className="mono-label text-muted-foreground mb-2">Toolkit</p>
-        <h2 className="font-display font-semibold text-2xl sm:text-3xl mb-10">
-          Technical Skills
-        </h2>
+        <Reveal className="mb-10">
+          <h2 className="font-display font-semibold text-2xl sm:text-3xl">
+            Technical Skills
+          </h2>
+          <span className="rule-draw" aria-hidden="true" />
+        </Reveal>
 
         <Reveal className="space-y-8">
           {skillCategories.map((cat) => (
             <div
               key={cat.name}
-              className="grid sm:grid-cols-12 gap-2 sm:gap-6 border-t border-border pt-5"
+              className="row-hover grid sm:grid-cols-12 gap-2 sm:gap-6 border-t border-border py-5"
             >
               <h3 className="mono-label text-foreground sm:col-span-3">
                 {cat.name}

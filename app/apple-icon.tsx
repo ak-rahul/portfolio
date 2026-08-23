@@ -25,11 +25,11 @@ export default async function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#2B4459",
+          background: "#3C4F35",
           fontFamily: "Newsreader",
           fontWeight: 700,
           fontSize: 110,
-          color: "#EFEBE1",
+          color: "#F6F2E7",
         }}
       >
         A
