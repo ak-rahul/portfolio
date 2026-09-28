@@ -11,7 +11,13 @@ declare global {
 
 /** Inertial smooth-scroll, skipped entirely under reduced-motion.
  *  Exposes the instance on window.__lenis so scrollToId() (lib/utils.ts)
- *  can route in-page nav clicks through the same easing as manual scroll. */
+ *  can route in-page nav clicks through the same easing as manual scroll.
+ *  Top-level import, not dynamic: a dynamic import() here was tried and
+ *  measured at ~640ms before window.__lenis became available — long
+ *  enough that a visitor could start scrolling on native browser scroll
+ *  and feel it switch to inertial mid-interaction. That's a worse tradeoff
+ *  than the modest bundle-size saving it bought; consistent smooth scroll
+ *  from the first frame wins here. */
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;

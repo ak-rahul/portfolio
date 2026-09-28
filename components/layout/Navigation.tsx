@@ -58,10 +58,15 @@ export default function Navigation() {
   }, []);
 
   useEffect(() => {
-    const el = linkRefs.current[active];
-    if (el) {
-      setIndicator({ left: el.offsetLeft, width: el.offsetWidth, opacity: 1 });
-    }
+    const updateIndicator = () => {
+      const el = linkRefs.current[active];
+      if (el) {
+        setIndicator({ left: el.offsetLeft, width: el.offsetWidth, opacity: 1 });
+      }
+    };
+    updateIndicator();
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
   }, [active]);
 
   const handleClick = useCallback(
@@ -78,8 +83,10 @@ export default function Navigation() {
       <ScrollProgress />
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 bg-background transition-colors duration-200",
-          scrolled ? "border-b border-border" : "border-b border-transparent"
+          "fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-200",
+          scrolled
+            ? "border-b border-border bg-background/85 backdrop-blur-md"
+            : "border-b border-transparent bg-background"
         )}
       >
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
@@ -116,8 +123,7 @@ export default function Navigation() {
               <span
                 className="nav-indicator"
                 style={{
-                  left: indicator.left,
-                  width: indicator.width,
+                  transform: `translateX(${indicator.left}px) scaleX(${indicator.width})`,
                   opacity: indicator.opacity,
                 }}
                 aria-hidden="true"
@@ -129,15 +135,24 @@ export default function Navigation() {
               className="md:hidden text-foreground p-2 -mr-2"
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
             >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile menu */}
-        {isOpen && (
-          <div className="md:hidden border-t border-border bg-background">
+        {/* Mobile menu — always mounted (not `{isOpen && ...}`) so the
+            grid-template-rows collapse can animate; `inert` when closed
+            keeps its links out of tab order and the a11y tree instead of
+            relying on zero height alone. */}
+        <div
+          id="mobile-menu"
+          className={cn("md:hidden mobile-menu-collapse", isOpen && "open")}
+          inert={!isOpen}
+        >
+          <div className="border-t border-border bg-background overflow-hidden">
             <div className="px-5 py-4 flex flex-col gap-4">
               {navItems.map((item) => (
                 <a
@@ -154,7 +169,7 @@ export default function Navigation() {
               ))}
             </div>
           </div>
-        )}
+        </div>
       </nav>
     </>
   );

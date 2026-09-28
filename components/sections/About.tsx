@@ -56,20 +56,20 @@ export default function About() {
           </div>
 
           {/* Stats */}
-          <div className="md:col-span-4 flex md:flex-col gap-8 md:gap-4 md:border-l md:border-border md:pl-6">
+          <div className="md:col-span-4 flex flex-row md:flex-col gap-10 md:gap-12 md:border-l md:border-border md:pl-8">
             <div>
-              <div className="font-display font-semibold text-4xl">
+              <div className="font-display font-semibold text-6xl sm:text-7xl leading-none tabular-nums tracking-tight">
                 <CountUp end={projects.length} />
               </div>
-              <div className="mono-label text-muted-foreground mt-1">
+              <div className="mono-label text-muted-foreground mt-3">
                 Projects
               </div>
             </div>
             <div>
-              <div className="font-display font-semibold text-4xl">
+              <div className="font-display font-semibold text-6xl sm:text-7xl leading-none tabular-nums tracking-tight">
                 <CountUp end={100} suffix="%" />
               </div>
-              <div className="mono-label text-muted-foreground mt-1">
+              <div className="mono-label text-muted-foreground mt-3">
                 Open Source
               </div>
             </div>

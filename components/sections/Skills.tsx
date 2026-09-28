@@ -6,7 +6,7 @@ export default function Skills() {
     <section id="skills" className="px-5 sm:px-8 section-rule">
       <div className="max-w-6xl mx-auto">
         <Reveal className="mb-10">
-          <h2 className="font-display font-semibold text-2xl sm:text-3xl">
+          <h2 className="font-display font-semibold text-3xl sm:text-4xl md:text-5xl">
             Technical Skills
           </h2>
           <span className="rule-draw" aria-hidden="true" />

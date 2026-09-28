@@ -1,21 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Github, Package } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data/projects";
 import { Project } from "@/types";
 import { cn } from "@/lib/utils";
+
+// Radix Dialog + its content only matter once a visitor actually clicks
+// "Details" — lazy-loaded so that chunk isn't part of the bundle every
+// visitor pays for on first load, most of whom never open it.
+const ProjectDetailsDialog = dynamic(() => import("./ProjectDetailsDialog"));
 
 function ProjectIndex({ index, className }: { index: number; className?: string }) {
   return (
@@ -101,12 +98,21 @@ function ProjectCard({
 }) {
   return (
     <Card className="card-lift h-full flex flex-col">
-      {/* Header */}
+      {/* Header — oversized faint numeral gives the spotlight cards editorial
+          weight; the small mono ProjectIndex stays reserved for the compact
+          "More Work" rows below, where this scale wouldn't fit. */}
       <CardHeader className="pb-0">
-        <ProjectIndex index={index} className="mb-2 block" />
-        <h3 className="font-display font-semibold text-foreground text-lg leading-tight">
-          {project.title}
-        </h3>
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="font-display font-semibold text-foreground text-xl sm:text-2xl leading-tight">
+            {project.title}
+          </h3>
+          <span
+            className="font-display font-semibold text-primary/10 text-6xl sm:text-7xl leading-none shrink-0"
+            aria-hidden="true"
+          >
+            {String(index).padStart(2, "0")}
+          </span>
+        </div>
       </CardHeader>
 
       {/* Description + tags */}
@@ -163,12 +169,20 @@ const rest = projects.slice(2);
 
 export default function Projects() {
   const [selected, setSelected] = useState<Project | null>(null);
+  // The dialog (and its Radix chunk) only mounts after the first "Details"
+  // click, then stays mounted for the rest of the session — see the
+  // dynamic() import above.
+  const [dialogMounted, setDialogMounted] = useState(false);
+  const openDetails = (project: Project) => {
+    setDialogMounted(true);
+    setSelected(project);
+  };
 
   return (
     <section id="projects" className="px-5 sm:px-8 section-rule">
       <div className="max-w-6xl mx-auto">
         <Reveal className="mb-10">
-          <h2 className="font-display font-semibold text-2xl sm:text-3xl">
+          <h2 className="font-display font-semibold text-3xl sm:text-4xl md:text-5xl">
             Featured Projects
           </h2>
           <span className="rule-draw" aria-hidden="true" />
@@ -181,7 +195,7 @@ export default function Projects() {
               key={project.id}
               project={project}
               index={i + 1}
-              onClick={() => setSelected(project)}
+              onClick={() => openDetails(project)}
             />
           ))}
         </Reveal>
@@ -196,81 +210,15 @@ export default function Projects() {
               key={project.id}
               project={project}
               index={i + spotlight.length + 1}
-              onClick={() => setSelected(project)}
+              onClick={() => openDetails(project)}
             />
           ))}
         </Reveal>
       </div>
 
-      {/* Details dialog */}
-      <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
-        <DialogContent className="max-w-2xl w-[90vw] max-h-[85vh] overflow-y-auto rounded-[var(--radius)]">
-          {selected && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="font-display text-2xl text-foreground">
-                  {selected.title}
-                </DialogTitle>
-                <DialogDescription className="text-muted-foreground">
-                  {selected.description}
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="space-y-5 pt-2">
-                <p className="text-muted-foreground leading-relaxed text-sm">
-                  {selected.longDescription}
-                </p>
-
-                <div>
-                  <h4 className="mono-label text-muted-foreground mb-3">
-                    Technologies Used
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selected.tech.map((tech: string) => (
-                      <Badge
-                        key={tech}
-                        variant="outline"
-                        className="rounded-[var(--radius)] text-xs"
-                      >
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <Button asChild className="rounded-[var(--radius)]">
-                    <a
-                      href={selected.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Github className="h-4 w-4 mr-2" />
-                      View on GitHub
-                    </a>
-                  </Button>
-                  {selected.pypi && (
-                    <Button
-                      variant="outline"
-                      asChild
-                      className="rounded-[var(--radius)]"
-                    >
-                      <a
-                        href={selected.pypi}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Package className="h-4 w-4 mr-2" />
-                        PyPI Package
-                      </a>
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      {dialogMounted && (
+        <ProjectDetailsDialog project={selected} onClose={() => setSelected(null)} />
+      )}
     </section>
   );
 }

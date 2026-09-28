@@ -52,12 +52,12 @@ export default function Hero() {
         <div className="grid md:grid-cols-12 gap-8 md:gap-10 items-start">
           <div className="md:col-span-7">
             <h1
-              className="font-display font-semibold tracking-tight leading-[1.05]"
-              style={{ fontSize: "clamp(2.75rem, 6vw, 4.75rem)" }}
+              className="font-display font-semibold tracking-tight leading-[0.98]"
+              style={{ fontSize: "clamp(3rem, 7.5vw, 6.5rem)" }}
             >
               AK Rahul
             </h1>
-            <h2 className="font-display italic font-medium text-2xl sm:text-3xl mt-3 text-muted-foreground">
+            <h2 className="font-display italic font-medium text-2xl sm:text-3xl md:text-4xl mt-4 text-muted-foreground">
               AI Developer &amp; Agentic Systems Engineer
             </h2>
           </div>
@@ -71,8 +71,16 @@ export default function Hero() {
               scalable agentic architecture.
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 mt-8">
+            {/* CTAs — flex-wrap (not a flex-col/sm:flex-row swap) so this
+                degrades safely at any width: the `md:col-span-5` grid
+                column is only ~245-300px wide right past the `sm:` 640px
+                breakpoint (roughly 700-1000px viewports — real iPad-
+                portrait and landscape-phone widths), too narrow for both
+                buttons on one line at their natural width (~338px
+                combined). A fixed sm:flex-row caused a real horizontal
+                page overflow there; wrapping just stacks them instead,
+                with no breakpoint to keep in sync with the grid. */}
+            <div className="flex flex-wrap gap-3 mt-8">
               <Button
                 onClick={() => scrollToId("projects")}
                 className="group rounded-[var(--radius)] font-mono text-xs uppercase tracking-[0.08em] h-11 px-6"

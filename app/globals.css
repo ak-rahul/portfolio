@@ -141,6 +141,28 @@
   }
 }
 
+/* ─── Utility: skip-to-content link ───
+   Off-screen until focused (keyboard-only affordance), then pinned above
+   the fixed nav (z-60 beats nav's z-50) so it's never obscured. ─── */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1.25rem;
+  z-index: 60;
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.6rem 1rem;
+  border-radius: 2px;
+  transition: top 150ms var(--ease-glide);
+}
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
 /* ─── Scrollbar ─── */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -294,18 +316,23 @@
 }
 
 /* ─── Utility: hairline rule that draws in under a section heading ───
-   Width 0 → fixed short width, gated by the same .reveal/.revealed state
-   Reveal.tsx already drives — wrap a heading in its own <Reveal> to use. */
+   Full width always, scaled from 0 via transform — not an animated
+   `width`, which forces layout on every frame. transform: scaleX is
+   compositor-only, so this stays smooth regardless of device. Gated by
+   the same .reveal/.revealed state Reveal.tsx already drives — wrap a
+   heading in its own <Reveal> to use. */
 .rule-draw {
   display: block;
-  width: 0;
+  width: 56px;
   height: 1px;
   margin-top: 14px;
   background: var(--color-primary);
-  transition: width 900ms var(--ease-glide) 150ms;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms var(--ease-glide) 150ms;
 }
 .reveal.revealed .rule-draw {
-  width: 56px;
+  transform: scaleX(1);
 }
 
 /* ─── Utility: nav link hover-preview underline ───
@@ -411,15 +438,43 @@ section {
   transform: scaleX(0);
 }
 
-/* ─── Nav active-section indicator (sliding underline) ─── */
+/* ─── Nav active-section indicator (sliding underline) ───
+   Positioned/sized via `transform: translateX() scaleX()` on a fixed
+   1px-wide base, driven from Navigation.tsx's `left`/`width` state — not
+   animated `left`/`width` properties directly, which force layout on
+   every frame of the slide. transform is compositor-only. */
 .nav-indicator {
   position: absolute;
   bottom: -1px;
+  left: 0;
+  width: 1px;
   height: 1px;
   background: var(--color-primary);
-  transition: left 300ms cubic-bezier(0.4, 0, 0.2, 1),
-    width 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease;
+  transform-origin: left;
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease;
   pointer-events: none;
+}
+
+/* ─── Mobile menu: smooth collapse, no fixed height needed ───
+   grid-template-rows 0fr→1fr animates to the content's natural height
+   without JS measuring it — the standard CSS-only technique for
+   animating to "auto" height. min-height: 0 on the grid child is
+   required for the 0fr track to actually collapse to zero (grid items
+   default to min-height: auto, which would otherwise floor the collapse
+   at the content's intrinsic height and block the animation). The child
+   also needs its own overflow: hidden so mid-transition content doesn't
+   spill past the shrinking row. Previously this menu had no transition
+   at all — it just mounted/unmounted instantly via `{isOpen && ...}`. */
+.mobile-menu-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms var(--ease-glide);
+}
+.mobile-menu-collapse.open {
+  grid-template-rows: 1fr;
+}
+.mobile-menu-collapse > div {
+  min-height: 0;
 }
 
 /* ─── Card hover lift (projects, contact tiles) ───
@@ -436,15 +491,33 @@ section {
   box-shadow: 0 16px 36px -18px rgba(60, 79, 53, 0.24);
 }
 
-/* ─── Mobile touch targets ─── */
-@media (max-width: 640px) {
+/* ─── Touch targets ───
+   Gated on actual input capability (no hover, coarse pointer), not a
+   viewport-width guess — a `max-width: 640px` cutoff misses every touch
+   tablet in the ~641-1024px range (iPad portrait is 768-834px and is
+   entirely touch-first), and would also incorrectly "fix" a narrow
+   desktop browser window that never needed it. */
+@media (hover: none) and (pointer: coarse) {
   button, a {
     min-height: 44px;
     min-width: 44px;
   }
-  p a, nav a, .social-icon, .underline-link, .tag-underline {
+  p a, .social-icon, .underline-link, .tag-underline {
     min-height: unset;
     min-width: unset;
+  }
+  /* .nav-link (desktop nav items only — NOT the wordmark, which still
+     gets the full 44px box above) keeps its compact visual size but
+     gains a padded, invisible hit-area via padding+negative margin so
+     it doesn't touch the nav-indicator's offsetLeft/offsetWidth math
+     (that reads the link's own box, and padding-block/margin-block are
+     vertical-only — horizontal geometry, which the indicator uses, is
+     untouched) or shift the h-16 nav bar's layout. */
+  .nav-link {
+    min-height: unset;
+    min-width: unset;
+    padding: 1rem 0.5rem;
+    margin: -1rem -0.5rem;
   }
 }
 

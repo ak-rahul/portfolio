@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Newsreader, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
+import { personJsonLdString } from "@/lib/structured-data";
 
 const newsreader = Newsreader({
   subsets: ["latin"],
@@ -92,10 +93,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${newsreader.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans antialiased min-h-screen bg-background text-foreground overflow-x-hidden`}
-      >
+    <html
+      lang="en"
+      suppressHydrationWarning
+      // next/font's .variable classes only set CSS custom properties
+      // (--font-ibm-plex-sans etc.) — they must live on <html> (:root),
+      // not <body>. globals.css's @theme block declares --font-sans /
+      // --font-display / --font-mono on `:root, :host` and resolves the
+      // var(--font-ibm-plex-sans) reference right there; a var() that
+      // can't resolve at the element matching the rule computes as
+      // invalid — and stays invalid through inheritance even on
+      // descendants that redefine the inner variable themselves. With
+      // the classes on <body> (a :root descendant), every themed font
+      // silently fell back to the OS default everywhere on the site.
+      className={`${newsreader.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
+    >
+      <head>
+        <script
+          type="application/ld+json"
+          // Static, developer-authored string from lib/structured-data.ts —
+          // no user input reaches this. Its CSP script-src hash in
+          // next.config.ts is computed from this exact same string.
+          dangerouslySetInnerHTML={{ __html: personJsonLdString }}
+        />
+      </head>
+      <body className="font-sans antialiased min-h-screen bg-background text-foreground overflow-x-hidden">
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <div className="grain-overlay" aria-hidden="true" />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
